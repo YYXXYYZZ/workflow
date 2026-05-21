@@ -1,8 +1,60 @@
 # AI-Friendly Dev-Test-Ops Workflow
 
+本文档描述一套以 **Issue 为流程入口**、以 **Dev-Test-Ops 完整链路为骨架**、以 **AI Agent + 人工审核 + 自动化门禁** 为执行方式的研发工作流。主流程保留从需求进入、规格设计、实现验证、PR/CI/Review、QA、发布、部署、运维到反馈反哺的完整闭环；效率中心作为独立的横向事件中心，统一沉淀每个阶段的人、AI、工具和交付物状态。
+
 ## 流程总览
 
 **Dev → PR → CI → Test → Release → Ops → Feedback**
+
+```mermaid
+flowchart TB
+  classDef phase fill:#f8fafc,stroke:#64748b,color:#0f172a
+  classDef gate fill:#fff7ed,stroke:#c2410c,color:#0f172a,stroke-width:2px
+  classDef center fill:#eff6ff,stroke:#2563eb,color:#0f172a,stroke-width:2px
+  classDef hub fill:#f1f5f9,stroke:#475569,color:#0f172a,stroke-dasharray:4 3
+
+  I["01. Issue Intake<br/>研发任务入口"]:::phase
+  R["02. Repo Rules<br/>仓库规则"]:::phase
+  S["03. Spec<br/>技术规格"]:::phase
+  P["04. Plan<br/>技术方案"]:::phase
+  T["05. Tasks<br/>任务拆解"]:::phase
+  IM["06. Implement<br/>代码实现"]:::phase
+  LV["07. Local Validate<br/>本地验证"]:::phase
+  PR["08. Open PR<br/>创建 PR"]:::phase
+  CI{"09. CI Gate<br/>CI 卡点"}:::gate
+  AIR["10. AI Review<br/>AI 审查"]:::phase
+  HR["11. Human Review<br/>人工审查"]:::phase
+  M["12. Merge<br/>合并"]:::phase
+  QA["13. Test / QA<br/>QA 验收"]:::phase
+  RG{"14. Release Gate<br/>上线卡点"}:::gate
+  D["15. Deploy<br/>部署"]:::phase
+  O["16. Ops<br/>线上验证"]:::phase
+  F["17. Feedback<br/>反馈闭环"]:::phase
+  HUB["所有阶段动作<br/>auto report / webhook / logs"]:::hub
+  EC["Efficiency Center / 效率中心<br/>横向事件中心"]:::center
+
+  I --> R --> S --> P --> T --> IM --> LV --> PR --> CI --> AIR --> HR --> M --> QA --> RG --> D --> O --> F
+  F -.->|"followups / update-rules"| I
+
+  I -.-> HUB
+  R -.-> HUB
+  S -.-> HUB
+  P -.-> HUB
+  T -.-> HUB
+  IM -.-> HUB
+  LV -.-> HUB
+  PR -.-> HUB
+  CI -.-> HUB
+  AIR -.-> HUB
+  HR -.-> HUB
+  M -.-> HUB
+  QA -.-> HUB
+  RG -.-> HUB
+  D -.-> HUB
+  O -.-> HUB
+  F -.-> HUB
+  HUB --> EC
+```
 
 所有阶段动作统一上报到独立的 **Efficiency Center / 效率中心**。效率中心不是主流程阶段，而是横向事件中心，单独成篇说明。
 
@@ -17,9 +69,15 @@
 | 任务分流 | 技术负责人 / 自动化 | 工具 | /triage | Projects / Labels / Actions | 设置负责人、优先级、里程碑 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Webhook / Actions | 记录 Issue 创建和分流动作 |
 
-**阶段产物**：issue.md / issue_context.json / 负责人 / 优先级 / labels
-
-↓ 进入 **02. Repo Rules / 仓库规则**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜issue.md / issue_context.json / 负责人 / 优先级 / labels<br>
+｜<br>
+↓ 02. Repo Rules / 仓库规则
+</div>
+</div>
 
 ---
 
@@ -32,9 +90,15 @@
 | 定义合并门禁 | 技术负责人 / 运维 | 工具 | /init-gates | Branch protection | CI green + required review |
 | 上报效率中心 | 自动化 | 工具 | auto report | Webhook / Actions | 记录规则初始化和变更 |
 
-**阶段产物**：AGENTS.md / constitution.md / PR template / CODEOWNERS / branch protection
-
-↓ 进入 **03. Spec / 技术规格**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜AGENTS.md / constitution.md / PR template / CODEOWNERS / branch protection<br>
+｜<br>
+↓ 03. Spec / 技术规格
+</div>
+</div>
 
 ---
 
@@ -47,9 +111,15 @@
 | 校验规格覆盖 Issue | 自动化 + 技术负责人 | 工具 | /check-spec | 轻量自建 Gate | 检查是否覆盖验收标准 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Webhook / Actions | 记录 spec 生成和审核结果 |
 
-**阶段产物**：spec.md / clarified scope / open questions / spec approval
-
-↓ 进入 **04. Plan / 技术方案**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜spec.md / clarified scope / open questions / spec approval<br>
+｜<br>
+↓ 04. Plan / 技术方案
+</div>
+</div>
 
 ---
 
@@ -63,9 +133,15 @@
 | 风险评估 | AI Agent 起草，人确认 | 仓库 | /risk | 自定义模板 | 数据迁移、兼容性、性能、安全 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Webhook / Actions | 记录方案生成和风险结果 |
 
-**阶段产物**：plan.md / arch.md / ADR.md / openapi.yaml / risk.md
-
-↓ 进入 **05. Tasks / 任务拆解**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜plan.md / arch.md / ADR.md / openapi.yaml / risk.md<br>
+｜<br>
+↓ 05. Tasks / 任务拆解
+</div>
+</div>
 
 ---
 
@@ -78,9 +154,15 @@
 | 标记测试任务 | AI Agent + 测试 / 开发 | 仓库 | /test-tasks | Spec Kit + 模板 | 每个功能任务对应测试任务 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Webhook / Actions | 记录任务拆解结果 |
 
-**阶段产物**：tasks.md / task dependencies / test tasks / implementation-ready
-
-↓ 进入 **06. Implement / 代码实现**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜tasks.md / task dependencies / test tasks / implementation-ready<br>
+｜<br>
+↓ 06. Implement / 代码实现
+</div>
+</div>
 
 ---
 
@@ -94,9 +176,15 @@
 | 补测试 | AI Agent 起草，开发确认 | 仓库 | /add-tests | Cline / Aider / test runner | unit / integration tests |
 | 上报效率中心 | 自动化 | 工具 | auto report | Agent logs / Webhook | 记录 Agent 操作、耗时、失败次数 |
 
-**阶段产物**：code changes / tests / commits / implementation_summary.md / draft branch
-
-↓ 进入 **07. Local Validate / 本地验证**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜code changes / tests / commits / implementation_summary.md / draft branch<br>
+｜<br>
+↓ 07. Local Validate / 本地验证
+</div>
+</div>
 
 ---
 
@@ -110,9 +198,15 @@
 | 解释失败 | AI Agent | 本地 | /explain-failure | Cline / Aider / logs | 根据报错继续修 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Test report collector | 记录测试耗时、失败类型、修复次数 |
 
-**阶段产物**：validation.md / local test report / fixed failures
-
-↓ 进入 **08. Open PR / 创建 PR**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜validation.md / local test report / fixed failures<br>
+｜<br>
+↓ 08. Open PR / 创建 PR
+</div>
+</div>
 
 ---
 
@@ -125,9 +219,15 @@
 | 请求 Review | 自动化 | 工具 | request review | CODEOWNERS / GitHub reviewers | 自动找代码审查人 |
 | 上报效率中心 | 自动化 | 工具 | auto report | GitHub Webhook | 记录 PR 创建、Review 分配 |
 
-**阶段产物**：Pull Request / PR description / linked issue / linked spec
-
-↓ 进入 **09. CI Gate / CI 卡点**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜Pull Request / PR description / linked issue / linked spec<br>
+｜<br>
+↓ 09. CI Gate / CI 卡点
+</div>
+</div>
 
 ---
 
@@ -153,9 +253,15 @@
 - PR description 完整
 - lint / test / build / security 全部通过
 
-**阶段产物**：ci-summary.json / coverage report / security report / build artifact / ci-gate-result.json
-
-↓ 进入 **10. AI Review / AI 审查**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜ci-summary.json / coverage report / security report / build artifact / ci-gate-result.json<br>
+｜<br>
+↓ 10. AI Review / AI 审查
+</div>
+</div>
 
 ---
 
@@ -169,9 +275,15 @@
 | 生成修复建议 | AI Agent | 工具 | auto | Continue | red check + suggested diff |
 | 上报效率中心 | 自动化 | 工具 | auto report | Review Webhook | 记录 AI review 命中问题和修复率 |
 
-**阶段产物**：AI status checks / review.json / suggested diff / risk notes
-
-↓ 进入 **11. Human Review / 人工审查**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜AI status checks / review.json / suggested diff / risk notes<br>
+｜<br>
+↓ 11. Human Review / 人工审查
+</div>
+</div>
 
 ---
 
@@ -185,9 +297,15 @@
 | 批准合并 | 代码审查人 / 技术负责人 | 工具 | approve | Branch protection | 人最终负责 |
 | 上报效率中心 | 自动化 | 工具 | auto report | GitHub Review Webhook | 记录 Review 耗时、返工次数 |
 
-**阶段产物**：review comments / approval / requested changes / merge decision
-
-↓ 进入 **12. Merge / 合并**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜review comments / approval / requested changes / merge decision<br>
+｜<br>
+↓ 12. Merge / 合并
+</div>
+</div>
 
 ---
 
@@ -201,9 +319,15 @@
 | 生成研发总结 | AI Agent | 仓库 | /summary | 自定义 Agent | final-summary.md |
 | 上报效率中心 | 自动化 | 工具 | auto report | GitHub Webhook | 记录合并、关闭、总结 |
 
-**阶段产物**：merged PR / closed dev issue / final-summary.md / follow-up issues
-
-↓ 进入 **13. Test / QA 验收**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜merged PR / closed dev issue / final-summary.md / follow-up issues<br>
+｜<br>
+↓ 13. Test / QA 验收
+</div>
+</div>
 
 ---
 
@@ -217,9 +341,15 @@
 | 验收通过/打回 | 测试 / 产品经理 | 工具 | /qa-pass /qa-fail | QA board / Bug tracker | 失败创建 bug issue |
 | 上报效率中心 | 自动化 | 工具 | auto report | QA Webhook / Test report | 记录用例数、失败数、缺陷分布 |
 
-**阶段产物**：test-plan.md / test-cases.md / regression-scope.md / qa-report.md / bug issues / qa-signoff
-
-↓ 进入 **14. Release Gate / 上线卡点**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜test-plan.md / test-cases.md / regression-scope.md / qa-report.md / bug issues / qa-signoff<br>
+｜<br>
+↓ 14. Release Gate / 上线卡点
+</div>
+</div>
 
 ---
 
@@ -246,9 +376,15 @@
 - observability checklist 完成
 - owner approval 完成
 
-**阶段产物**：release-gate-result.json / release.md / rollback.md / approval record
-
-↓ 进入 **15. Deploy / 部署**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜release-gate-result.json / release.md / rollback.md / approval record<br>
+｜<br>
+↓ 15. Deploy / 部署
+</div>
+</div>
 
 ---
 
@@ -261,9 +397,15 @@
 | 记录部署结果 | 自动化 | 工具 | auto | CD report | deploy-report.json |
 | 上报效率中心 | 自动化 | 工具 | auto report | CD Webhook / Deploy logs | 记录部署耗时、版本、环境、结果 |
 
-**阶段产物**：deploy-report.json / deployed version / rollout status
-
-↓ 进入 **16. Ops / 线上验证**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜deploy-report.json / deployed version / rollout status<br>
+｜<br>
+↓ 16. Ops / 线上验证
+</div>
+</div>
 
 ---
 
@@ -277,9 +419,15 @@
 | 更新 Runbook | AI Agent 起草，SRE 审核 | 仓库 | /update-runbook | ops/runbooks | 固化处理流程 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Observability Webhook | 记录线上指标、告警、回滚、事故 |
 
-**阶段产物**：ops-report.md / metrics-check.md / diagnosis.md / incident.md / rollback-report.md / runbook update
-
-↓ 进入 **17. Feedback / 反馈闭环**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜ops-report.md / metrics-check.md / diagnosis.md / incident.md / rollback-report.md / runbook update<br>
+｜<br>
+↓ 17. Feedback / 反馈闭环
+</div>
+</div>
 
 ---
 
@@ -292,9 +440,15 @@
 | 反哺规则 | AI Agent 建议，人审核 | 仓库 | /update-rules | AGENTS.md / checks / runbook | 重复问题写进规则 |
 | 上报效率中心 | 自动化 | 工具 | auto report | Efficiency Center | 汇总完整交付链路指标 |
 
-**阶段产物**：final-summary.md / follow-up issues / updated AGENTS.md / updated checks / updated runbook / efficiency report
-
-↓ 反哺 **01. Issue Intake / 研发任务入口**
+<div align="center">
+<div style="display: inline-block; text-align: left;">
+｜<br>
+｜阶段产物：<br>
+｜final-summary.md / follow-up issues / updated AGENTS.md / updated checks / updated runbook / efficiency report<br>
+｜<br>
+↓ 反哺：01. Issue Intake / 研发任务入口
+</div>
+</div>
 
 ## Efficiency Center / 效率中心
 
@@ -325,4 +479,6 @@
 }
 ```
 
-“效率中心”最好不要只是日志库，而是一个**研发过程事件中心**：所有工具动作都用统一事件格式上报，再做 Issue 维度、阶段维度、角色维度、Agent 维度的统计。OpenTelemetry 的思路可以借用，因为它本身就是把 logs、metrics、traces 作为可关联的信号来采集和分析。([opentelemetry.io][2])
+“效率中心”最好不要只是日志库，而是一个**研发过程事件中心**：所有工具动作都用统一事件格式上报，再做 Issue 维度、阶段维度、角色维度、Agent 维度的统计。OpenTelemetry 的思路可以借用，因为它本身就是把 logs、metrics、traces 作为可关联的信号来采集和分析。([opentelemetry.io][1])
+
+[1]: https://opentelemetry.io/docs/specs/otel/logs/?utm_source=chatgpt.com "OpenTelemetry Logging"
