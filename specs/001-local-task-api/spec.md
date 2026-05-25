@@ -23,6 +23,14 @@
 
 - None.
 
+### Session 2026-05-25
+
+- Q: 数据持久化预期是什么？ → A: Local file persistence：任务持久化到本地文件，重启后仍可读取。
+- Q: API contract surface 采用什么形式？ → A: REST-style HTTP JSON，包含 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}`。
+- Q: 错误响应格式是什么？ → A: Unified error object：错误响应统一为 `{ "error": { "code": "...", "message": "..." } }`。
+- Q: 参数校验策略是什么？ → A: Strict profile：trim `title`/`description`；`title` 长度 1-100；`description` 最长 1000；reject unknown fields 和系统维护字段。
+- Q: 测试覆盖范围是什么？ → A: Core happy-path only：自动化测试只覆盖创建、列表、更新、删除的成功路径。
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - 创建任务 (Priority: P1)
@@ -38,6 +46,7 @@
 1. **Given** 当前没有任务，**When** 用户创建一个包含 `title` 和 `description` 的任务且未指定 `status`，**Then** 系统创建新任务，返回稳定任务标识，并将 `status` 设为 `todo`。
 2. **Given** 用户准备创建任务，**When** 用户提交空白 `title`，**Then** 系统拒绝创建并返回可理解的校验错误，任务列表不新增记录。
 3. **Given** 用户准备创建任务，**When** 用户提交 `status` 为 `todo`、`doing` 或 `done`，**Then** 系统创建任务并保留用户选择的合法状态。
+4. **Given** 用户创建任务后重启本地 API，**When** 用户再次查看任务列表，**Then** 已创建且未删除的任务仍然可见。
 
 ---
 
@@ -94,7 +103,12 @@
 - 用户删除任务后再次查看列表或尝试更新该任务。
 - 用户未提供 `description` 或提供空 `description`。
 - 用户尝试提供或覆盖系统维护的 `created_at`、`updated_at`。
+- 用户提交超过长度限制的 `title` 或 `description`。
+- 用户提交 contract 未定义的未知字段。
 - 当前没有任何任务时查看任务列表。
+- 本地持久化文件不存在时启动 API。
+- 本地持久化文件包含无法识别的数据时启动 API。
+- API 返回参数校验错误、未找到错误或本地持久化错误时，错误响应结构不一致。
 
 ### Non-Goals
 
@@ -123,32 +137,44 @@
 - **FR-012**: 系统 MUST 对不存在或已删除任务的更新、删除请求返回明确的未找到结果，且不影响其他任务。
 - **FR-013**: 系统 MUST 在校验失败时返回可理解的错误信息，并保证失败操作不创建、不更新、不删除任务。
 - **FR-014**: 系统 MUST 在本 PoC 范围内不要求登录、多用户配置、前端页面、通知配置或部署环境。
+- **FR-015**: 系统 MUST 将任务持久化到本地文件，并在本地 API 重启后保留已创建且未删除的任务。
+- **FR-016**: 系统 MUST 通过 REST-style HTTP JSON contract 暴露创建任务、查看任务列表、更新任务状态和删除任务操作。
+- **FR-017**: 系统 MUST 对所有失败响应使用统一错误对象，格式为 `{ "error": { "code": "...", "message": "..." } }`。
+- **FR-018**: 系统 MUST 在写入前 trim `title` 和 `description`，并要求 trim 后的 `title` 长度为 1-100 个字符、`description` 长度不超过 1000 个字符。
+- **FR-019**: 系统 MUST 拒绝 contract 未定义的未知输入字段，以及用户提交的系统维护字段，包括稳定任务标识、`created_at` 和 `updated_at`。
 
 ### API / Contract Requirements *(include when feature crosses a boundary)*
 
-- **AC-001**: 本地任务管理 API contract MUST 覆盖创建任务、查看任务列表、更新任务状态和删除任务四类操作。
-- **AC-002**: Contract MUST 定义每类操作的输入字段、输出字段、成功结果、校验错误、未找到结果和无副作用失败语义。
+- **AC-001**: 本地任务管理 API contract MUST 使用 REST-style HTTP JSON，并覆盖 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}` 四类操作。
+- **AC-002**: Contract MUST 定义每类操作的 HTTP method、path、JSON 输入字段、JSON 输出字段、成功结果、校验错误、未找到结果和无副作用失败语义。
 - **AC-003**: Contract MUST 明确 `status` 允许值、默认值、非法值处理方式，以及 `created_at`、`updated_at` 的维护规则。
 - **AC-004**: Contract examples、fixtures 或 executable checks 如果属于 PoC 可运行资产，MUST 放在 `demo/`；`specs/` 只保存 feature 文档和设计说明。
+- **AC-005**: Contract MUST 明确本地文件持久化的重启后读取预期，以及持久化文件缺失或数据无法识别时的失败语义。
+- **AC-006**: Contract MUST 为参数校验错误、未找到错误和本地持久化错误定义稳定的 `error.code` 与用户可理解的 `error.message`。
+- **AC-007**: Contract MUST 包含 strict validation examples，覆盖 trim、长度限制、非法 `status`、未知字段和系统维护字段输入。
+- **AC-008**: 本轮自动化 test scope MUST 覆盖同一本地 API 会话内 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}` 的成功路径；重启后持久化读取、失败路径和 strict validation examples MUST 在 contract 中定义，但不要求本轮自动化测试全部覆盖。
 
 ### Key Entities *(include if feature involves data)*
 
-- **Task**: 用户创建和管理的本地工作项。关键属性包括稳定任务标识、`title`、`description`、`status`、`created_at`、`updated_at`。`status` 只能是 `todo`、`doing`、`done`。
+- **Task**: 用户创建和管理的本地工作项。关键属性包括稳定任务标识、`title`、`description`、`status`、`created_at`、`updated_at`。`title` trim 后长度为 1-100 个字符，`description` trim 后长度不超过 1000 个字符，`status` 只能是 `todo`、`doing`、`done`。
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001**: 用户按照 contract 完成创建任务、查看列表、更新状态、删除任务的完整核心流程用时不超过 2 分钟。
-- **SC-002**: 在核心 journey 测试中，新创建任务在同一本地 PoC 会话内 100% 可以从任务列表中看到。
+- **SC-002**: 在 PoC 验收中，新创建任务在本地 API 重启后 100% 仍可以从任务列表中看到。
 - **SC-003**: 对 `todo`、`doing`、`done` 之外状态值的尝试，100% 被拒绝且不会改变已有任务。
 - **SC-004**: 删除成功的任务在 100% 的删除场景中不再出现在任务列表中，且不能再被更新。
 - **SC-005**: PoC 验收可以完全在本地完成，且不需要登录、多用户设置、前端页面、通知配置或部署步骤。
+- **SC-006**: 本轮自动化测试 100% 覆盖创建、查看列表、更新状态、删除任务四个成功路径。
+- **SC-007**: 参数校验、错误响应和持久化异常的 contract examples 100% 明确预期行为，但不要求本轮自动化测试全部覆盖。
 
 ## Assumptions
 
 - 本 PoC 的目标用户是本地运行和验证 API contract 的开发者或技术评审者。
-- 本轮 PoC 验证任务管理行为和 contract，不要求证明进程重启后的数据保留。
-- `title` 是用户可读任务名称，因此作为必填字段；`description` 可以为空文本。
+- 本轮 PoC 使用本地文件持久化任务数据，并要求验证本地 API 重启后的任务保留行为。
+- `title` 是用户可读任务名称，因此作为必填字段；`description` 可以为空文本；两者写入前都会进行 trim。
 - 用户不需要直接设置 `created_at`、`updated_at`；这两个字段由系统根据任务创建和更新行为维护。
 - 列表只需要覆盖当前未删除任务；搜索、筛选、分页和排序自定义不在本轮范围内。
+- 本轮测试覆盖采用 core happy-path only；失败路径和 strict validation 仍需写清 contract examples，后续可按风险追加自动化测试。
