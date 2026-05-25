@@ -66,7 +66,7 @@
 ### Tests for User Story 1
 
 - [ ] T015 [P] [US1] Add success tests for `POST /tasks` default status, explicit status, trimmed fields, and response fields in `demo/tests/test_tasks_success_paths.py`
-- [ ] T016 [P] [US1] Add failure tests for blank title, overlong title, overlong description, illegal status, unknown fields, and system-maintained fields in `demo/tests/test_tasks_failure_paths.py`
+- [ ] T016 [P] [US1] Add failure tests for blank title, overlong title, overlong description, illegal status, unknown fields, and system-maintained fields, asserting exact `validation_error` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 1
 
@@ -87,7 +87,7 @@
 
 - [ ] T019 [P] [US2] Add success tests for `GET /tasks` empty list, multiple tasks, complete fields, and creation-time ordering in `demo/tests/test_tasks_success_paths.py`
 - [ ] T020 [US2] Add persistence test proving created tasks remain visible after app/database reinitialization using the same SQLite file in `demo/tests/test_tasks_success_paths.py`
-- [ ] T021 [P] [US2] Add failure test for a repository persistence read error returning unified `persistence_error` in `demo/tests/test_tasks_failure_paths.py`
+- [ ] T021 [P] [US2] Add failure tests for missing/corrupt SQLite initialization and repository persistence read errors returning exact `persistence_error` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 2
 
@@ -107,7 +107,7 @@
 ### Tests for User Story 3
 
 - [ ] T024 [P] [US3] Add success tests for `PATCH /tasks/{task_id}/status` legal status updates, stable `created_at`, changed `updated_at`, and response fields in `demo/tests/test_tasks_success_paths.py`
-- [ ] T025 [P] [US3] Add failure tests for invalid status, nonexistent task ID, and unified error object shape in `demo/tests/test_tasks_failure_paths.py`
+- [ ] T025 [P] [US3] Add failure tests for invalid status, nonexistent task ID, PATCH unknown fields, and PATCH system-maintained fields, asserting exact `validation_error` and `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 3
 
@@ -127,7 +127,7 @@
 ### Tests for User Story 4
 
 - [ ] T028 [P] [US4] Add success tests for `DELETE /tasks/{task_id}` returning 204 and removing the task from later `GET /tasks` results in `demo/tests/test_tasks_success_paths.py`
-- [ ] T029 [P] [US4] Add failure tests for deleting a nonexistent task, deleting an already deleted task, and updating a deleted task in `demo/tests/test_tasks_failure_paths.py`
+- [ ] T029 [P] [US4] Add failure tests for deleting a nonexistent task, deleting an already deleted task, and updating a deleted task, asserting exact `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 4
 
@@ -143,7 +143,7 @@
 **Purpose**: Final validation, contract alignment, and small cleanup.
 
 - [ ] T032 [P] Ensure FastAPI generated OpenAPI includes `POST /tasks`, `GET /tasks`, `PATCH /tasks/{task_id}/status`, and `DELETE /tasks/{task_id}` matching `demo/contracts/openapi.yaml` in `demo/tests/test_tasks_success_paths.py`
-- [ ] T033 [P] Add assertions that all failure-path tests return `{ "error": { "code": "...", "message": "..." } }` in `demo/tests/test_tasks_failure_paths.py`
+- [ ] T033 [P] Add cross-check assertions that all failure-path tests return `{ "error": { "code": "...", "message": "..." } }` with exact expected `error.code` values and non-empty `error.message` in `demo/tests/test_tasks_failure_paths.py`
 - [ ] T034 Run `uv run pytest` from `demo/` and record the passing command in `specs/001-local-task-api/quickstart.md`
 - [ ] T035 Validate quickstart commands for install, run, core curl flow, and tests in `specs/001-local-task-api/quickstart.md`
 - [ ] T036 Confirm all runnable source code, tests, contract examples, scripts, fixtures, mocks, and generated dependency files are under `demo/` and document any exception in `specs/001-local-task-api/tasks.md`

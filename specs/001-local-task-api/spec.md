@@ -125,7 +125,7 @@
 
 - **FR-001**: 系统 MUST 允许用户创建任务。
 - **FR-002**: 系统 MUST 为每个任务提供稳定任务标识，以便后续更新状态和删除。
-- **FR-003**: 创建任务时，`title` MUST 为必填且不能是空白文本。
+- **FR-003**: 创建任务时，`title` MUST 为必填；trim 和长度规则见 FR-018。
 - **FR-004**: 创建任务时，`description` MAY 为空；为空时任务仍然可以创建。
 - **FR-005**: 创建任务时，`status` MUST 只能是 `todo`、`doing`、`done`；未提供时 MUST 默认为 `todo`。
 - **FR-006**: 系统 MUST 为任务维护 `created_at` 和 `updated_at`，创建时两者均有值且表示任务创建时间。
