@@ -8,6 +8,26 @@
 
 **Input**: User description: "$ARGUMENTS"
 
+**Language**: 正文描述使用中文；SDD、PoC、Spec Kit、API、contract、test、CI、PR
+等特定名词保留惯用 English 用法。
+
+## Clarifications *(mandatory before planning/implementation)*
+
+<!--
+  ACTION REQUIRED: Requirements MUST be clarified before implementation.
+  Record resolved questions and decisions here. If any critical requirement
+  remains unclear, mark it as NEEDS CLARIFICATION and do not proceed to plan,
+  tasks, or implementation.
+-->
+
+### Completed Clarifications
+
+- [DATE]: [Question or ambiguity] -> [Decision]
+
+### Open Questions
+
+- [None, or NEEDS CLARIFICATION: specific unresolved question blocking progress]
+
 ## User Scenarios & Testing *(mandatory)*
 
 <!--
@@ -78,6 +98,10 @@
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
+### Non-Goals
+
+- [Explicitly out-of-scope behavior, integration, platform, or data path]
+
 ## Requirements *(mandatory)*
 
 <!--
@@ -97,6 +121,13 @@
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
 - **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### API / Contract Requirements *(include when feature crosses a boundary)*
+
+- **AC-001**: [Boundary name] MUST define input shape, output shape, error
+  semantics, and compatibility expectations.
+- **AC-002**: Contract examples, fixtures, or executable checks that are part of
+  the PoC MUST live under `demo/`; design documents may live under `specs/`.
 
 ### Key Entities *(include if feature involves data)*
 

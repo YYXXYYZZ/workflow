@@ -2,6 +2,18 @@
 
 本文档描述一套以 **Issue 为流程入口**、以 **Dev-Test-Ops 完整链路为骨架**、以 **AI Agent + 人工审核 + 自动化门禁** 为执行方式的研发工作流。主流程保留从需求进入、规格设计、实现验证、PR/CI/Review、QA、发布、部署、运维到反馈反哺的完整闭环；效率中心作为独立的横向事件中心，统一沉淀每个阶段的人、AI、工具和交付物状态。
 
+## SDD PoC 工作区约束
+
+本仓库作为 SDD PoC 工作区使用，具体治理规则以 `.specify/memory/constitution.md`
+为准。所有 PoC source code、test、fixture、mock、contract 示例和本地运行脚本必须
+保留在 `demo/` 目录内；`specs/` 用于 feature 文档，`.specify/` 用于 Spec Kit
+治理模板和脚本。
+
+需求必须先澄清再进入 implementation。每个 PoC 默认采用小而清晰、可测试、易审查
+的实现方式，优先使用简单架构、明确 API / contract 和自动化 test evidence。后续
+文档描述使用中文，SDD、PoC、Spec Kit、API、contract、test、workflow、agent、
+CI、PR 等特定名词保留惯用 English 用法。
+
 ## 流程总览
 
 **Dev → PR → CI → Test → Release → Ops → Feedback**

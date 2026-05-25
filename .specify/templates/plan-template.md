@@ -4,6 +4,9 @@
 
 **Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
+**Language**: 正文描述使用中文；SDD、PoC、Spec Kit、API、contract、test、CI、PR
+等特定名词保留惯用 English 用法。
+
 **Note**: This template is filled in by the `/speckit-plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
@@ -30,9 +33,17 @@
 
 **Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]
 
+**PoC Location**: `demo/` (all runnable PoC implementation files, tests,
+fixtures, contract examples, and local scripts MUST stay under this directory)
+
+**API Contracts**: [contract files or boundary description, e.g., OpenAPI,
+CLI schema, event schema, module interface, or N/A with rationale]
+
 **Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]
 
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]
+**Constraints**: [domain-specific constraints plus repository constraints:
+implementation remains small/reviewable, runnable PoC files stay in `demo/`,
+requirements have completed clarification, or NEEDS CLARIFICATION]
 
 **Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
@@ -40,7 +51,16 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- [ ] Clarification complete: no critical `NEEDS CLARIFICATION` item blocks planning
+      or implementation; non-goals and scope boundaries are explicit.
+- [ ] PoC boundary respected: every runnable implementation file, test, fixture,
+      contract example, mock, and local script is planned under `demo/`.
+- [ ] Simplicity justified: architecture is the smallest clear design that satisfies
+      the spec; any extra dependency, abstraction, or layer has a stated reason.
+- [ ] API contract explicit: every HTTP/CLI/event/file/module boundary has input,
+      output, error semantics, and compatibility expectations documented.
+- [ ] Automated test evidence planned: tests or justified alternative validation map
+      to the user stories and include repeatable commands.
 
 ## Project Structure
 
@@ -59,49 +79,25 @@ specs/[###-feature]/
 ### Source Code (repository root)
 <!--
   ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
+  for this feature. All runnable PoC implementation files MUST stay under demo/.
+  Documentation under specs/ and governance files under .specify/ are allowed
+  outside demo/ because they are not PoC implementation files.
 -->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
+demo/
 ├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+├── tests/
+│   ├── contract/
+│   ├── integration/
+│   └── unit/
+├── contracts/
+├── fixtures/
+└── scripts/
 ```
 
 **Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+directories captured above. Explain any omitted demo/ subdirectory.]
 
 ## Complexity Tracking
 
@@ -109,5 +105,5 @@ directories captured above]
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
 |-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+| [e.g., file outside demo/] | [current need] | [why demo/ placement is insufficient] |
+| [e.g., additional framework/layer] | [specific problem] | [why direct/simple implementation is insufficient] |
