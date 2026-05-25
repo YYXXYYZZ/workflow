@@ -1,0 +1,217 @@
+openapi: 3.1.0
+info:
+  title: Local Task Management API
+  version: 0.1.0
+  description: REST-style HTTP JSON contract for the local task management PoC.
+servers:
+  - url: http://127.0.0.1:8000
+paths:
+  /tasks:
+    post:
+      summary: Create a task
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTaskRequest"
+      responses:
+        "201":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "500":
+          $ref: "#/components/responses/PersistenceError"
+    get:
+      summary: List tasks
+      operationId: listTasks
+      responses:
+        "200":
+          description: All non-deleted tasks ordered by creation time ascending
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        "500":
+          $ref: "#/components/responses/PersistenceError"
+  /tasks/{task_id}/status:
+    patch:
+      summary: Update task status
+      operationId: updateTaskStatus
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateStatusRequest"
+      responses:
+        "200":
+          description: Task status updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "404":
+          $ref: "#/components/responses/TaskNotFound"
+        "500":
+          $ref: "#/components/responses/PersistenceError"
+  /tasks/{task_id}:
+    delete:
+      summary: Delete a task
+      operationId: deleteTask
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Task deleted
+        "404":
+          $ref: "#/components/responses/TaskNotFound"
+        "500":
+          $ref: "#/components/responses/PersistenceError"
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - todo
+        - doing
+        - done
+    Task:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - title
+        - description
+        - status
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 1000
+        status:
+          $ref: "#/components/schemas/Status"
+        created_at:
+          type: string
+          format: date-time
+          description: ISO 8601 UTC timestamp set by the API.
+        updated_at:
+          type: string
+          format: date-time
+          description: ISO 8601 UTC timestamp set by the API.
+    CreateTaskRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 100
+          description: Trimmed before validation and storage.
+        description:
+          type: string
+          maxLength: 1000
+          default: ""
+          description: Trimmed before validation and storage.
+        status:
+          $ref: "#/components/schemas/Status"
+    UpdateStatusRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - status
+      properties:
+        status:
+          $ref: "#/components/schemas/Status"
+    ErrorBody:
+      type: object
+      additionalProperties: false
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          enum:
+            - validation_error
+            - task_not_found
+            - persistence_error
+        message:
+          type: string
+          minLength: 1
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          $ref: "#/components/schemas/ErrorBody"
+  responses:
+    ValidationError:
+      description: Request failed validation
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            illegalStatus:
+              value:
+                error:
+                  code: validation_error
+                  message: status must be one of todo, doing, done
+    TaskNotFound:
+      description: Task does not exist or has already been deleted
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            missing:
+              value:
+                error:
+                  code: task_not_found
+                  message: task not found
+    PersistenceError:
+      description: Local SQLite persistence failed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            storage:
+              value:
+                error:
+                  code: persistence_error
+                  message: task storage is unavailable

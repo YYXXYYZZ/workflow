@@ -28,7 +28,7 @@
 
 - [ ] CHK011 Do status requirements align consistently across user scenarios, functional requirements, contract requirements, and entity definition? [Consistency, Spec §FR-005, Spec §AC-003, Spec §Key Entities]
 - [ ] CHK012 Do deletion requirements consistently define that deleted tasks are absent from lists and unavailable for later updates? [Consistency, Spec §User Story 4, Spec §FR-011, Spec §SC-004]
-- [ ] CHK013 Does the spec consistently distinguish PoC acceptance expectations from the narrower automated test scope? [Consistency, Spec §AC-008, Spec §SC-002, Spec §SC-006]
+- [ ] CHK013 Does the spec consistently distinguish PoC acceptance expectations from automated success-path and failure-path test scope? [Consistency, Spec §AC-008, Spec §SC-002, Spec §SC-006]
 - [ ] CHK014 Are no-login, no-multi-user, no-frontend, no-notification, and no-deployment boundaries consistent across non-goals and requirements? [Consistency, Spec §Non-Goals, Spec §FR-014]
 
 ## Acceptance Criteria Quality
@@ -36,7 +36,7 @@
 - [ ] CHK015 Are success criteria measurable without depending on hidden implementation details? [Measurability, Spec §Success Criteria]
 - [ ] CHK016 Is the two-minute core-flow outcome tied clearly enough to the documented API contract rather than an undefined user interface? [Clarity, Spec §SC-001]
 - [ ] CHK017 Is the restart persistence outcome objectively verifiable from requirements alone? [Measurability, Spec §SC-002, Spec §FR-015]
-- [ ] CHK018 Does the happy-path automated test scope define the exact scenario boundaries it includes and excludes? [Clarity, Spec §AC-008, Spec §SC-006]
+- [ ] CHK018 Does the automated test scope define which success paths, validation failures, not-found failures, illegal status failures, and error format checks are included? [Clarity, Spec §AC-008, Spec §SC-006, Spec §SC-007]
 
 ## Scenario Coverage
 
@@ -56,7 +56,7 @@
 
 - [ ] CHK027 Are local-only assumptions explicit enough to prevent external database, hosted service, deployment, or authentication dependencies from entering the plan? [Assumption, Spec §Assumptions, Spec §Non-Goals]
 - [ ] CHK028 Are contract examples and executable checks classified clearly enough to determine when they belong under `demo/` versus `specs/`? [Clarity, Spec §AC-004]
-- [ ] CHK029 Is the decision to document strict validation examples while limiting automated tests to happy path clear enough to avoid task-scope drift? [Consistency, Spec §AC-007, Spec §AC-008, Spec §SC-007]
+- [ ] CHK029 Is the decision to cover both strict validation examples and corresponding automated failure-path tests clear enough to avoid task-scope drift? [Consistency, Spec §AC-007, Spec §AC-008, Spec §SC-007]
 
 ## Ambiguities & Conflicts
 

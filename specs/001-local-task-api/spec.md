@@ -29,7 +29,7 @@
 - Q: API contract surface 采用什么形式？ → A: REST-style HTTP JSON，包含 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}`。
 - Q: 错误响应格式是什么？ → A: Unified error object：错误响应统一为 `{ "error": { "code": "...", "message": "..." } }`。
 - Q: 参数校验策略是什么？ → A: Strict profile：trim `title`/`description`；`title` 长度 1-100；`description` 最长 1000；reject unknown fields 和系统维护字段。
-- Q: 测试覆盖范围是什么？ → A: Core happy-path only：自动化测试只覆盖创建、列表、更新、删除的成功路径。
+- Q: 测试覆盖范围是什么？ → A: Success and failure paths：自动化测试覆盖创建、列表、更新、删除的成功路径，以及参数校验、未找到、非法状态等失败路径。
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -152,7 +152,7 @@
 - **AC-005**: Contract MUST 明确本地文件持久化的重启后读取预期，以及持久化文件缺失或数据无法识别时的失败语义。
 - **AC-006**: Contract MUST 为参数校验错误、未找到错误和本地持久化错误定义稳定的 `error.code` 与用户可理解的 `error.message`。
 - **AC-007**: Contract MUST 包含 strict validation examples，覆盖 trim、长度限制、非法 `status`、未知字段和系统维护字段输入。
-- **AC-008**: 本轮自动化 test scope MUST 覆盖同一本地 API 会话内 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}` 的成功路径；重启后持久化读取、失败路径和 strict validation examples MUST 在 contract 中定义，但不要求本轮自动化测试全部覆盖。
+- **AC-008**: 本轮自动化 test scope MUST 覆盖同一本地 API 会话内 `POST /tasks`、`GET /tasks`、`PATCH /tasks/{id}/status`、`DELETE /tasks/{id}` 的成功路径，以及参数校验、未找到、非法状态等失败路径；重启后持久化读取和持久化异常 MUST 在 contract 中定义，并在可复跑验证中覆盖。
 
 ### Key Entities *(include if feature involves data)*
 
@@ -168,7 +168,7 @@
 - **SC-004**: 删除成功的任务在 100% 的删除场景中不再出现在任务列表中，且不能再被更新。
 - **SC-005**: PoC 验收可以完全在本地完成，且不需要登录、多用户设置、前端页面、通知配置或部署步骤。
 - **SC-006**: 本轮自动化测试 100% 覆盖创建、查看列表、更新状态、删除任务四个成功路径。
-- **SC-007**: 参数校验、错误响应和持久化异常的 contract examples 100% 明确预期行为，但不要求本轮自动化测试全部覆盖。
+- **SC-007**: 本轮自动化测试 100% 覆盖参数校验错误、未找到错误、非法状态错误和统一错误对象格式。
 
 ## Assumptions
 
@@ -177,4 +177,4 @@
 - `title` 是用户可读任务名称，因此作为必填字段；`description` 可以为空文本；两者写入前都会进行 trim。
 - 用户不需要直接设置 `created_at`、`updated_at`；这两个字段由系统根据任务创建和更新行为维护。
 - 列表只需要覆盖当前未删除任务；搜索、筛选、分页和排序自定义不在本轮范围内。
-- 本轮测试覆盖采用 core happy-path only；失败路径和 strict validation 仍需写清 contract examples，后续可按风险追加自动化测试。
+- 本轮测试覆盖采用 success and failure paths；contract examples 与自动化测试都需要覆盖核心成功路径和主要失败路径。
