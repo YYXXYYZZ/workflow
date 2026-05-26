@@ -10,60 +10,60 @@
 
 ## Requirement Completeness
 
-- [ ] CHK001 Are all four required API operations documented with method and path requirements? [Completeness, Spec §AC-001]
-- [ ] CHK002 Are JSON request and response shape requirements required for every operation, including success and failure outcomes? [Completeness, Spec §AC-002]
-- [ ] CHK003 Are task identity requirements complete enough to support update and delete operations without ambiguity? [Completeness, Spec §FR-002]
-- [ ] CHK004 Are local file persistence requirements documented for normal startup, restart, missing file, and unreadable data scenarios? [Coverage, Spec §AC-005, Spec §Edge Cases]
-- [ ] CHK005 Are `demo/` placement requirements documented for source code, tests, fixtures, mocks, contract examples, and local scripts? [Completeness, Spec §Clarifications, Spec §AC-004]
+- [x] CHK001 Are all four required API operations documented with method and path requirements? [Completeness, Spec §AC-001]
+- [x] CHK002 Are JSON request and response shape requirements required for every operation, including success and failure outcomes? [Completeness, Spec §AC-002]
+- [x] CHK003 Are task identity requirements complete enough to support update and delete operations without ambiguity? [Completeness, Spec §FR-002]
+- [x] CHK004 Are local file persistence requirements documented for normal startup, restart, missing file, and unreadable data scenarios? [Coverage, Spec §AC-005, Spec §Edge Cases]
+- [x] CHK005 Are `demo/` placement requirements documented for source code, tests, fixtures, mocks, contract examples, and local scripts? [Completeness, Spec §Clarifications, Spec §AC-004]
 
 ## Requirement Clarity
 
-- [ ] CHK006 Is the REST-style HTTP JSON contract surface specified clearly enough to prevent alternate CLI or function-only interpretations? [Clarity, Spec §FR-016, Spec §AC-001]
-- [ ] CHK007 Are `title` and `description` trimming and length rules quantified with exact limits and timing? [Clarity, Spec §FR-018]
-- [ ] CHK008 Are system-maintained fields identified explicitly enough to determine which user-provided fields must be rejected? [Clarity, Spec §FR-019]
-- [ ] CHK009 Is the unified error response format specified with required object nesting and required field names? [Clarity, Spec §FR-017]
-- [ ] CHK010 Are `error.code` stability expectations clear enough for future contract examples to avoid ad hoc error names? [Ambiguity, Spec §AC-006]
+- [x] CHK006 Is the REST-style HTTP JSON contract surface specified clearly enough to prevent alternate CLI or function-only interpretations? [Clarity, Spec §FR-016, Spec §AC-001]
+- [x] CHK007 Are `title` and `description` trimming and length rules quantified with exact limits and timing? [Clarity, Spec §FR-018]
+- [x] CHK008 Are system-maintained fields identified explicitly enough to determine which user-provided fields must be rejected? [Clarity, Spec §FR-019]
+- [x] CHK009 Is the unified error response format specified with required object nesting and required field names? [Clarity, Spec §FR-017]
+- [x] CHK010 Are `error.code` stability expectations clear enough for future contract examples to avoid ad hoc error names? [Ambiguity, Spec §AC-006]
 
 ## Requirement Consistency
 
-- [ ] CHK011 Do status requirements align consistently across user scenarios, functional requirements, contract requirements, and entity definition? [Consistency, Spec §FR-005, Spec §AC-003, Spec §Key Entities]
-- [ ] CHK012 Do deletion requirements consistently define that deleted tasks are absent from lists and unavailable for later updates? [Consistency, Spec §User Story 4, Spec §FR-011, Spec §SC-004]
-- [ ] CHK013 Does the spec consistently distinguish PoC acceptance expectations from automated success-path and failure-path test scope? [Consistency, Spec §AC-008, Spec §SC-002, Spec §SC-006]
-- [ ] CHK014 Are no-login, no-multi-user, no-frontend, no-notification, and no-deployment boundaries consistent across non-goals and requirements? [Consistency, Spec §Non-Goals, Spec §FR-014]
+- [x] CHK011 Do status requirements align consistently across user scenarios, functional requirements, contract requirements, and entity definition? [Consistency, Spec §FR-005, Spec §AC-003, Spec §Key Entities]
+- [x] CHK012 Do deletion requirements consistently define that deleted tasks are absent from lists and unavailable for later updates? [Consistency, Spec §User Story 4, Spec §FR-011, Spec §SC-004]
+- [x] CHK013 Does the spec consistently distinguish PoC acceptance expectations from automated success-path and failure-path test scope? [Consistency, Spec §AC-008, Spec §SC-002, Spec §SC-006]
+- [x] CHK014 Are no-login, no-multi-user, no-frontend, no-notification, and no-deployment boundaries consistent across non-goals and requirements? [Consistency, Spec §Non-Goals, Spec §FR-014]
 
 ## Acceptance Criteria Quality
 
-- [ ] CHK015 Are success criteria measurable without depending on hidden implementation details? [Measurability, Spec §Success Criteria]
-- [ ] CHK016 Is the two-minute core-flow outcome tied clearly enough to the documented API contract rather than an undefined user interface? [Clarity, Spec §SC-001]
-- [ ] CHK017 Is the restart persistence outcome objectively verifiable from requirements alone? [Measurability, Spec §SC-002, Spec §FR-015]
-- [ ] CHK018 Does the automated test scope define which success paths, validation failures, not-found failures, illegal status failures, and error format checks are included? [Clarity, Spec §AC-008, Spec §SC-006, Spec §SC-007]
+- [x] CHK015 Are success criteria measurable without depending on hidden implementation details? [Measurability, Spec §Success Criteria]
+- [x] CHK016 Is the two-minute core-flow outcome tied clearly enough to the documented API contract rather than an undefined user interface? [Clarity, Spec §SC-001]
+- [x] CHK017 Is the restart persistence outcome objectively verifiable from requirements alone? [Measurability, Spec §SC-002, Spec §FR-015]
+- [x] CHK018 Does the automated test scope define which success paths, validation failures, not-found failures, illegal status failures, and error format checks are included? [Clarity, Spec §AC-008, Spec §SC-006, Spec §SC-007]
 
 ## Scenario Coverage
 
-- [ ] CHK019 Are primary success paths covered for create, list, status update, and delete? [Coverage, Spec §User Scenarios & Testing]
-- [ ] CHK020 Are alternate valid create scenarios covered, including omitted status and explicitly supplied legal status? [Coverage, Spec §User Story 1]
-- [ ] CHK021 Are exception scenarios documented for invalid status, missing task, deleted task, unknown fields, system fields, and persistence file problems? [Coverage, Spec §Edge Cases]
-- [ ] CHK022 Are recovery expectations after local API restart described clearly enough to guide plan and task generation? [Recovery Flow, Spec §User Story 1, Spec §FR-015]
+- [x] CHK019 Are primary success paths covered for create, list, status update, and delete? [Coverage, Spec §User Scenarios & Testing]
+- [x] CHK020 Are alternate valid create scenarios covered, including omitted status and explicitly supplied legal status? [Coverage, Spec §User Story 1]
+- [x] CHK021 Are exception scenarios documented for invalid status, missing task, deleted task, unknown fields, system fields, and persistence file problems? [Coverage, Spec §Edge Cases]
+- [x] CHK022 Are recovery expectations after local API restart described clearly enough to guide plan and task generation? [Recovery Flow, Spec §User Story 1, Spec §FR-015]
 
 ## Edge Case Coverage
 
-- [ ] CHK023 Are requirements defined for empty list behavior before any task exists? [Edge Case, Spec §User Story 2, Spec §Edge Cases]
-- [ ] CHK024 Are boundary cases for blank title, overlong title, overlong description, empty description, and illegal status documented? [Edge Case, Spec §Edge Cases, Spec §FR-018]
-- [ ] CHK025 Are failure side-effect requirements stated for validation failures, not-found results, and deleted-task operations? [Coverage, Spec §FR-010, Spec §FR-012, Spec §FR-013]
-- [ ] CHK026 Are expectations for malformed or unreadable persistence data stated as contract requirements rather than left to implementation choice? [Gap, Spec §AC-005]
+- [x] CHK023 Are requirements defined for empty list behavior before any task exists? [Edge Case, Spec §User Story 2, Spec §Edge Cases]
+- [x] CHK024 Are boundary cases for blank title, overlong title, overlong description, empty description, and illegal status documented? [Edge Case, Spec §Edge Cases, Spec §FR-018]
+- [x] CHK025 Are failure side-effect requirements stated for validation failures, not-found results, and deleted-task operations? [Coverage, Spec §FR-010, Spec §FR-012, Spec §FR-013]
+- [x] CHK026 Are expectations for malformed or unreadable persistence data stated as contract requirements rather than left to implementation choice? [Gap, Spec §AC-005]
 
 ## Dependencies & Assumptions
 
-- [ ] CHK027 Are local-only assumptions explicit enough to prevent external database, hosted service, deployment, or authentication dependencies from entering the plan? [Assumption, Spec §Assumptions, Spec §Non-Goals]
-- [ ] CHK028 Are contract examples and executable checks classified clearly enough to determine when they belong under `demo/` versus `specs/`? [Clarity, Spec §AC-004]
-- [ ] CHK029 Is the decision to cover both strict validation examples and corresponding automated failure-path tests clear enough to avoid task-scope drift? [Consistency, Spec §AC-007, Spec §AC-008, Spec §SC-007]
+- [x] CHK027 Are local-only assumptions explicit enough to prevent external database, hosted service, deployment, or authentication dependencies from entering the plan? [Assumption, Spec §Assumptions, Spec §Non-Goals]
+- [x] CHK028 Are contract examples and executable checks classified clearly enough to determine when they belong under `demo/` versus `specs/`? [Clarity, Spec §AC-004]
+- [x] CHK029 Is the decision to cover both strict validation examples and corresponding automated failure-path tests clear enough to avoid task-scope drift? [Consistency, Spec §AC-007, Spec §AC-008, Spec §SC-007]
 
 ## Ambiguities & Conflicts
 
-- [ ] CHK030 Is the exact set of stable `error.code` values defined or intentionally deferred to contract examples? [Ambiguity, Spec §AC-006]
-- [ ] CHK031 Is the persistence file location intentionally deferred to planning rather than required by the spec? [Ambiguity, Spec §FR-015]
-- [ ] CHK032 Is timestamp format intentionally deferred, or should the spec define a required representation for `created_at` and `updated_at`? [Ambiguity, Spec §FR-006, Spec §AC-003]
-- [ ] CHK033 Is task ordering in list responses intentionally out of scope, or should list ordering requirements be specified? [Ambiguity, Spec §FR-007, Spec §Assumptions]
+- [x] CHK030 Is the exact set of stable `error.code` values defined or intentionally deferred to contract examples? [Ambiguity, Spec §AC-006]
+- [x] CHK031 Is the persistence file location intentionally deferred to planning rather than required by the spec? [Ambiguity, Spec §FR-015]
+- [x] CHK032 Is timestamp format intentionally deferred, or should the spec define a required representation for `created_at` and `updated_at`? [Ambiguity, Spec §FR-006, Spec §AC-003]
+- [x] CHK033 Is task ordering in list responses intentionally out of scope, or should list ordering requirements be specified? [Ambiguity, Spec §FR-007, Spec §Assumptions]
 
 ## Notes
 
@@ -71,3 +71,4 @@
 - Add comments or findings inline
 - Link to relevant resources or documentation
 - Items are numbered sequentially for easy reference
+- 2026-05-26 核对：所有 33 项均已从 `spec.md`、`plan.md`、`data-model.md`、`contracts/openapi.yaml`、`quickstart.md` 和 `tasks.md` 找到明确落点；本次只核对 requirements writing，不执行实现或 API 测试。
