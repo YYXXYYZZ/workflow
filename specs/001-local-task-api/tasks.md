@@ -29,14 +29,14 @@
 
 **Purpose**: Initialize the Python FastAPI PoC under `demo/`.
 
-- [ ] T001 Create project directories `demo/src/task_api/`, `demo/tests/`, `demo/contracts/`, `demo/scripts/`, and `demo/data/`
-- [ ] T002 Initialize uv project configuration with FastAPI, Uvicorn, pytest, and httpx dependencies in `demo/pyproject.toml`
-- [ ] T003 Generate uv lockfile for the demo project in `demo/uv.lock`
-- [ ] T004 Copy the design OpenAPI contract from `specs/001-local-task-api/contracts/openapi.yaml` to `demo/contracts/openapi.yaml`
-- [ ] T005 [P] Create local run script for uvicorn in `demo/scripts/run.sh`
-- [ ] T006 [P] Create local pytest script in `demo/scripts/test.sh`
-- [ ] T007 [P] Add package marker in `demo/src/task_api/__init__.py`
-- [ ] T008 [P] Add data directory keep file in `demo/data/.gitkeep`
+- [X] T001 Create project directories `demo/src/task_api/`, `demo/tests/`, `demo/contracts/`, `demo/scripts/`, and `demo/data/`
+- [X] T002 Initialize uv project configuration with FastAPI, Uvicorn, pytest, and httpx dependencies in `demo/pyproject.toml`
+- [X] T003 Generate uv lockfile for the demo project in `demo/uv.lock`
+- [X] T004 Copy the design OpenAPI contract from `specs/001-local-task-api/contracts/openapi.yaml` to `demo/contracts/openapi.yaml`
+- [X] T005 [P] Create local run script for uvicorn in `demo/scripts/run.sh`
+- [X] T006 [P] Create local pytest script in `demo/scripts/test.sh`
+- [X] T007 [P] Add package marker in `demo/src/task_api/__init__.py`
+- [X] T008 [P] Add data directory keep file in `demo/data/.gitkeep`
 
 ---
 
@@ -46,12 +46,12 @@
 
 **CRITICAL**: No user story implementation should begin until this phase is complete.
 
-- [ ] T009 Define `Status`, task response schema, create request schema, update status request schema, and strict field validation in `demo/src/task_api/models.py`
-- [ ] T010 Implement unified API error helpers for `validation_error`, `task_not_found`, and `persistence_error` in `demo/src/task_api/errors.py`
-- [ ] T011 Implement SQLite connection setup, schema creation, row mapping, and configurable DB path support in `demo/src/task_api/database.py`
-- [ ] T012 Implement repository class skeleton with constructor and shared DB helpers in `demo/src/task_api/repository.py`
-- [ ] T013 Implement FastAPI app factory, dependency injection for repository, startup DB initialization, and validation exception handler in `demo/src/task_api/main.py`
-- [ ] T014 Create pytest fixtures for temporary SQLite DB files and FastAPI TestClient in `demo/tests/conftest.py`
+- [X] T009 Define `Status`, task response schema, create request schema, update status request schema, and strict field validation in `demo/src/task_api/models.py`
+- [X] T010 Implement unified API error helpers for `validation_error`, `task_not_found`, and `persistence_error` in `demo/src/task_api/errors.py`
+- [X] T011 Implement SQLite connection setup, schema creation, row mapping, and configurable DB path support in `demo/src/task_api/database.py`
+- [X] T012 Implement repository class skeleton with constructor and shared DB helpers in `demo/src/task_api/repository.py`
+- [X] T013 Implement FastAPI app factory, dependency injection for repository, startup DB initialization, and validation exception handler in `demo/src/task_api/main.py`
+- [X] T014 Create pytest fixtures for temporary SQLite DB files and FastAPI TestClient in `demo/tests/conftest.py`
 
 **Checkpoint**: Foundation ready - each user story can now add endpoint-specific repository methods, route handlers, and tests.
 
@@ -65,13 +65,13 @@
 
 ### Tests for User Story 1
 
-- [ ] T015 [P] [US1] Add success tests for `POST /tasks` default status, explicit status, trimmed fields, and response fields in `demo/tests/test_tasks_success_paths.py`
-- [ ] T016 [P] [US1] Add failure tests for blank title, overlong title, overlong description, illegal status, unknown fields, and system-maintained fields, asserting exact `validation_error` codes in `demo/tests/test_tasks_failure_paths.py`
+- [X] T015 [P] [US1] Add success tests for `POST /tasks` default status, explicit status, trimmed fields, and response fields in `demo/tests/test_tasks_success_paths.py`
+- [X] T016 [P] [US1] Add failure tests for blank title, overlong title, overlong description, illegal status, unknown fields, and system-maintained fields, asserting exact `validation_error` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 1
 
-- [ ] T017 [US1] Implement `create_task` repository method with UUID generation, ISO 8601 UTC timestamps, SQLite insert, and persistence error mapping in `demo/src/task_api/repository.py`
-- [ ] T018 [US1] Implement `POST /tasks` route returning 201 and unified errors in `demo/src/task_api/main.py`
+- [X] T017 [US1] Implement `create_task` repository method with UUID generation, ISO 8601 UTC timestamps, SQLite insert, and persistence error mapping in `demo/src/task_api/repository.py`
+- [X] T018 [US1] Implement `POST /tasks` route returning 201 and unified errors in `demo/src/task_api/main.py`
 
 **Checkpoint**: User Story 1 is independently functional and testable.
 
@@ -85,14 +85,14 @@
 
 ### Tests for User Story 2
 
-- [ ] T019 [P] [US2] Add success tests for `GET /tasks` empty list, multiple tasks, complete fields, and creation-time ordering in `demo/tests/test_tasks_success_paths.py`
-- [ ] T020 [US2] Add persistence test proving created tasks remain visible after app/database reinitialization using the same SQLite file in `demo/tests/test_tasks_success_paths.py`
-- [ ] T021 [P] [US2] Add failure tests for missing/corrupt SQLite initialization and repository persistence read errors returning exact `persistence_error` codes in `demo/tests/test_tasks_failure_paths.py`
+- [X] T019 [P] [US2] Add success tests for `GET /tasks` empty list, multiple tasks, complete fields, and creation-time ordering in `demo/tests/test_tasks_success_paths.py`
+- [X] T020 [US2] Add persistence test proving created tasks remain visible after app/database reinitialization using the same SQLite file in `demo/tests/test_tasks_success_paths.py`
+- [X] T021 [P] [US2] Add failure tests for missing/corrupt SQLite initialization and repository persistence read errors returning exact `persistence_error` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 2
 
-- [ ] T022 [US2] Implement `list_tasks` repository method ordered by `created_at` ascending with persistence error mapping in `demo/src/task_api/repository.py`
-- [ ] T023 [US2] Implement `GET /tasks` route returning an array of task responses and unified errors in `demo/src/task_api/main.py`
+- [X] T022 [US2] Implement `list_tasks` repository method ordered by `created_at` ascending with persistence error mapping in `demo/src/task_api/repository.py`
+- [X] T023 [US2] Implement `GET /tasks` route returning an array of task responses and unified errors in `demo/src/task_api/main.py`
 
 **Checkpoint**: User Stories 1 and 2 are independently functional and testable.
 
@@ -106,13 +106,13 @@
 
 ### Tests for User Story 3
 
-- [ ] T024 [P] [US3] Add success tests for `PATCH /tasks/{task_id}/status` legal status updates, stable `created_at`, changed `updated_at`, and response fields in `demo/tests/test_tasks_success_paths.py`
-- [ ] T025 [P] [US3] Add failure tests for invalid status, nonexistent task ID, PATCH unknown fields, and PATCH system-maintained fields, asserting exact `validation_error` and `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
+- [X] T024 [P] [US3] Add success tests for `PATCH /tasks/{task_id}/status` legal status updates, stable `created_at`, changed `updated_at`, and response fields in `demo/tests/test_tasks_success_paths.py`
+- [X] T025 [P] [US3] Add failure tests for invalid status, nonexistent task ID, PATCH unknown fields, and PATCH system-maintained fields, asserting exact `validation_error` and `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 3
 
-- [ ] T026 [US3] Implement `update_task_status` repository method with not-found detection, timestamp update, and persistence error mapping in `demo/src/task_api/repository.py`
-- [ ] T027 [US3] Implement `PATCH /tasks/{task_id}/status` route returning updated task response and unified errors in `demo/src/task_api/main.py`
+- [X] T026 [US3] Implement `update_task_status` repository method with not-found detection, timestamp update, and persistence error mapping in `demo/src/task_api/repository.py`
+- [X] T027 [US3] Implement `PATCH /tasks/{task_id}/status` route returning updated task response and unified errors in `demo/src/task_api/main.py`
 
 **Checkpoint**: User Stories 1, 2, and 3 are independently functional and testable.
 
@@ -126,13 +126,13 @@
 
 ### Tests for User Story 4
 
-- [ ] T028 [P] [US4] Add success tests for `DELETE /tasks/{task_id}` returning 204 and removing the task from later `GET /tasks` results in `demo/tests/test_tasks_success_paths.py`
-- [ ] T029 [P] [US4] Add failure tests for deleting a nonexistent task, deleting an already deleted task, and updating a deleted task, asserting exact `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
+- [X] T028 [P] [US4] Add success tests for `DELETE /tasks/{task_id}` returning 204 and removing the task from later `GET /tasks` results in `demo/tests/test_tasks_success_paths.py`
+- [X] T029 [P] [US4] Add failure tests for deleting a nonexistent task, deleting an already deleted task, and updating a deleted task, asserting exact `task_not_found` codes in `demo/tests/test_tasks_failure_paths.py`
 
 ### Implementation for User Story 4
 
-- [ ] T030 [US4] Implement `delete_task` repository method with hard delete, affected-row not-found detection, and persistence error mapping in `demo/src/task_api/repository.py`
-- [ ] T031 [US4] Implement `DELETE /tasks/{task_id}` route returning 204 and unified errors in `demo/src/task_api/main.py`
+- [X] T030 [US4] Implement `delete_task` repository method with hard delete, affected-row not-found detection, and persistence error mapping in `demo/src/task_api/repository.py`
+- [X] T031 [US4] Implement `DELETE /tasks/{task_id}` route returning 204 and unified errors in `demo/src/task_api/main.py`
 
 **Checkpoint**: All user stories are independently functional and testable.
 
@@ -142,11 +142,11 @@
 
 **Purpose**: Final validation, contract alignment, and small cleanup.
 
-- [ ] T032 [P] Ensure FastAPI generated OpenAPI includes `POST /tasks`, `GET /tasks`, `PATCH /tasks/{task_id}/status`, and `DELETE /tasks/{task_id}` matching `demo/contracts/openapi.yaml` in `demo/tests/test_tasks_success_paths.py`
-- [ ] T033 [P] Add cross-check assertions that all failure-path tests return `{ "error": { "code": "...", "message": "..." } }` with exact expected `error.code` values and non-empty `error.message` in `demo/tests/test_tasks_failure_paths.py`
-- [ ] T034 Run `uv run pytest` from `demo/` and record the passing command in `specs/001-local-task-api/quickstart.md`
-- [ ] T035 Validate quickstart commands for install, run, core curl flow, and tests in `specs/001-local-task-api/quickstart.md`
-- [ ] T036 Confirm all runnable source code, tests, contract examples, scripts, fixtures, mocks, and generated dependency files are under `demo/` and document any exception in `specs/001-local-task-api/tasks.md`
+- [X] T032 [P] Ensure FastAPI generated OpenAPI includes `POST /tasks`, `GET /tasks`, `PATCH /tasks/{task_id}/status`, and `DELETE /tasks/{task_id}` matching `demo/contracts/openapi.yaml` in `demo/tests/test_tasks_success_paths.py`
+- [X] T033 [P] Add cross-check assertions that all failure-path tests return `{ "error": { "code": "...", "message": "..." } }` with exact expected `error.code` values and non-empty `error.message` in `demo/tests/test_tasks_failure_paths.py`
+- [X] T034 Run `uv run pytest` from `demo/` and record the passing command in `specs/001-local-task-api/quickstart.md`
+- [X] T035 Validate quickstart commands for install, run, core curl flow, and tests in `specs/001-local-task-api/quickstart.md`
+- [X] T036 Confirm all runnable source code, tests, contract examples, scripts, fixtures, mocks, and generated dependency files are under `demo/` and document any exception in `specs/001-local-task-api/tasks.md`
 
 ---
 
@@ -243,3 +243,4 @@ uv run pytest
 - [US1] through [US4] labels map directly to user stories in `spec.md`.
 - All runnable PoC implementation files must remain under `demo/`.
 - `specs/001-local-task-api/contracts/openapi.yaml` is the design contract; `demo/contracts/openapi.yaml` is the runnable PoC copy.
+- 2026-05-26 implementation validation: all runnable PoC source code, tests, contract copy, scripts, generated dependency files, and runtime data paths are under `demo/`; no PoC runnable-file exceptions were found. The design contract remains under `specs/001-local-task-api/contracts/openapi.yaml` as a documentation artifact.

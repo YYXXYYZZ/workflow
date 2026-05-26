@@ -55,11 +55,25 @@ Delete task:
 curl -sS -X DELETE http://127.0.0.1:8000/tasks/{task_id}
 ```
 
+Validated on 2026-05-26 with local server on `127.0.0.1:8000`:
+
+- `POST /tasks` returned `201` with a complete task.
+- `GET /tasks` returned the created task, then `[]` after deletion.
+- `PATCH /tasks/{task_id}/status` returned `200` and changed `status` to `doing`.
+- `DELETE /tasks/{task_id}` returned `204`.
+
 ## Run Tests
 
 ```bash
 cd demo
 uv run pytest
+```
+
+Validated on 2026-05-26:
+
+```text
+uv run pytest
+24 passed
 ```
 
 Expected test coverage:
